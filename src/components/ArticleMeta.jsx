@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks'
 
-function ArticleMeta({author,createdAt}) {
+function ArticleMeta({author,createdAt, article}) {
   const { authUser } = useAuth()
 
   const canUpdate = authUser?.username === author?.username
@@ -19,7 +19,18 @@ function ArticleMeta({author,createdAt}) {
         </Link>
         <span className="date">{new Date(createdAt).toDateString()}</span>
       </div>
- 
+
+      {canUpdate && (
+        <span style={{ marginLeft: 'auto' }}>
+          <Link
+            to={`/editor/${article?.slug}`}
+            className="btn btn-sm btn-outline-primary"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <i className="ion-edit"></i> Edit Article
+          </Link>
+        </span>
+      )}
     </div>
   )
 }

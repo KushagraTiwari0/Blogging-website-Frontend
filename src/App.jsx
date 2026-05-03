@@ -90,8 +90,13 @@ function App() {
             </Route>
             <Route
               path="/editor/:slug"
-              element={<h1>Editor</h1>}
-            />
+              element={<AuthRoute />}
+            >
+              <Route
+                path="/editor/:slug"
+                element={<Editor />}
+              />
+            </Route>
             <Route
               path="/article/:slug"
               element={<Article />}
