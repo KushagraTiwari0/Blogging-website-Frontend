@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import { useAuth } from "../hooks";
 import { API_BASE_URL } from "../constants";
+import { FormErrors } from "../components";
 
 function Auth() {
   const isRegister = useMatch("/register");
@@ -26,10 +27,18 @@ function Auth() {
     } catch (error) {
       console.error("Auth error:", error);
 
-      const { status, data } = error.response;
+      if (error.response && error.response.data) {
+        const { status, data } = error.response;
 
-      if (status === 422) {
-        actions.setErrors(data.errors);
+        if (status === 422 && data.errors) {
+          actions.setErrors(data.errors);
+        } else if (data.message) {
+          actions.setErrors({ auth: [data.message] });
+        } else {
+          actions.setErrors({ auth: ["An unexpected error occurred."] });
+        }
+      } else {
+        actions.setErrors({ network: ["Network error or server is down."] });
       }
     } finally {
       actions.setSubmitting(false);
@@ -68,6 +77,7 @@ function Auth() {
             >
               {({ isSubmitting }) => (
                 <>
+                  <FormErrors />
                   <Form>
                     <fieldset disabled={isSubmitting}>
                       {isRegister && (
