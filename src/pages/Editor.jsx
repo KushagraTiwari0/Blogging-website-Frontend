@@ -3,11 +3,20 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import TurndownService from "turndown";
+import { gfm } from "turndown-plugin-gfm";
 import { FormErrors, TagsInput } from "../components";
 import useCreateArticle from "../hooks/useCreateArticle";
 import { useUpdateArticle } from "../hooks";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../constants";
+
+const turndownService = new TurndownService({
+  headingStyle: "atx",
+  codeBlockStyle: "fenced",
+  emDelimiter: "_",
+});
+turndownService.use(gfm);
 
 // ── Markdown Toolbar ──────────────────────────────────────────
 const TOOLBAR_ACTIONS = [
@@ -214,6 +223,26 @@ function Editor() {
                                 className="form-control md-body-textarea"
                                 rows={14}
                                 placeholder="Write your article (markdown supported)"
+                                onPaste={(e) => {
+                                  const html = e.clipboardData.getData("text/html");
+                                  if (html) {
+                                    e.preventDefault();
+                                    const markdown = turndownService.turndown(html);
+                                    
+                                    const textarea = bodyRef.current;
+                                    const start = textarea.selectionStart;
+                                    const end = textarea.selectionEnd;
+                                    const currentValue = field.value || "";
+                                    const newValue = currentValue.slice(0, start) + markdown + currentValue.slice(end);
+                                    
+                                    setFieldValue("body", newValue);
+                                    
+                                    requestAnimationFrame(() => {
+                                      textarea.focus();
+                                      textarea.setSelectionRange(start + markdown.length, start + markdown.length);
+                                    });
+                                  }
+                                }}
                               />
                             )}
                           </Field>
