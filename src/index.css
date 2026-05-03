@@ -1158,3 +1158,36 @@ body.dark .settings-fetch-error {
   border-color: #e74c3c;
   color: #fff;
 }
+
+/* ── Auth Error Banner ────────────────────────────────────── */
+.auth-error-banner {
+  border: 1px solid #e8c4c4;
+  background: #fdf4f4;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+}
+
+body.dark .auth-error-banner {
+  background: #2a1515;
+  border-color: #5a2020;
+}
+
+.auth-error-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: #c0392b;
+  margin: 0;
+  padding: 4px 0;
+}
+
+body.dark .auth-error-msg { color: #e57373; }
+
+.auth-error-icon {
+  font-size: 0.65rem;
+  font-weight: 700;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
