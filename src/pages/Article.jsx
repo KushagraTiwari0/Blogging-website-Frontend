@@ -2,6 +2,8 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   ArticleComments,
   ArticleMeta,
@@ -57,7 +59,11 @@ function Article() {
         <div className="row article-content">
           <div className="col-md-12">
             <p>{article?.description}</p>
-            <p>{article?.body}</p>
+            <div className="markdown-body">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {article?.body || ""}
+              </ReactMarkdown>
+            </div>
             
             {article?.tagList && article.tagList.length > 0 && (
               <ul className="tag-list" style={{ marginTop: '24px', display: 'flex', gap: '6px', listStyle: 'none', padding: 0 }}>
