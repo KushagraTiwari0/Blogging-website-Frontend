@@ -1,42 +1,27 @@
 import React from "react";
 import { useAuth } from "../hooks";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { API_BASE_URL } from "../constants";
 
 function ArticleComment({ comment, onDelete }) {
   const { author, body, createdAt, id } = comment;
   const { authUser } = useAuth();
 
   // Check if the current user is the comment's author
-  const canDelete =
-    author?.username === authUser?.username;
+  const canDelete = author?.username === authUser?.username;
 
   // Handle Delete Request
   const handleDelete = async () => {
     try {
-      const response = await fetch(
-        `/api/articles/${comment.articleSlug}/comments/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authUser.token}`, // Include token in Authorization header
-          },
-        },
+      await axios.delete(
+        `${API_BASE_URL}/api/articles/${comment.articleSlug}/comments/${id}`,
       );
-
-      if (!response.ok) {
-        throw new Error(
-          "Failed to delete comment",
-        );
-      }
-
       // Call onDelete to update UI after successful deletion
       onDelete(id);
     } catch (error) {
-      console.error(
-        "Error deleting comment:",
-        error,
-      );
+      console.error("Error deleting comment:", error);
+      alert("Failed to delete comment.");
     }
   };
 
@@ -48,13 +33,13 @@ function ArticleComment({ comment, onDelete }) {
 
       {id && (
         <div className="card-footer">
-          <Link>{author.username}</Link>&nbsp;
+          <Link to={`/profile/${author?.username}`}>{author?.username}</Link>&nbsp;
           <span className="date-posted">
             {new Date(createdAt).toDateString()}
           </span>
           &nbsp;
           {canDelete && (
-            <button onClick={handleDelete}>
+            <button onClick={handleDelete} className="btn btn-sm btn-outline-danger">
               Delete
             </button>
           )}

@@ -4,11 +4,11 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../constants";
 
 const createCommentApi = async (values) => {
   const { data } = await axios.post(
-    `https://blogging-website-backend-9gfs.onrender.com/api/articles/${values.slug}/comments`,
+    `${API_BASE_URL}/api/articles/${values.slug}/comments`,
     { ...values.values },
   );
 
@@ -17,7 +17,6 @@ const createCommentApi = async (values) => {
 
 export default function useCreateComment() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   const {
     mutate: createComment,
@@ -25,11 +24,9 @@ export default function useCreateComment() {
   } = useMutation({
     mutationFn: createCommentApi,
     onSuccess: () => {
-      alert("New comment successfully created");
       queryClient.invalidateQueries({
         queryKey: ["articleComments"],
       });
-      navigate(-1);
     },
     onError: (err) => alert(err.message),
   });

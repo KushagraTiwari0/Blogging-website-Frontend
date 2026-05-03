@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   useArticleCommentsQuery,
   useAuth,
@@ -16,6 +16,13 @@ function ArticleComments() {
     articleCommentsError,
   } = useArticleCommentsQuery();
 
+  // Local state to allow optimistic removal after delete
+  const [deletedIds, setDeletedIds] = useState([]);
+
+  const handleDelete = (id) => {
+    setDeletedIds((prev) => [...prev, id]);
+  };
+
   if (!isAuth) {
     return (
       <p>
@@ -25,18 +32,30 @@ function ArticleComments() {
       </p>
     );
   }
+
+  if (isArticleCommentsLoading) {
+    return <p>Loading comments...</p>;
+  }
+
+  if (articleCommentsError) {
+    return <p>Failed to load comments.</p>;
+  }
+
+  const visibleComments = (articleComments?.comments ?? []).filter(
+    (c) => !deletedIds.includes(c.id),
+  );
+
   return (
     <div>
       <ArticleCommentForm />
 
-      {articleComments?.comments?.map(
-        (comment) => (
-          <ArticleComment
-            key={comment.id}
-            comment={comment}
-          />
-        ),
-      )}
+      {visibleComments.map((comment) => (
+        <ArticleComment
+          key={comment.id}
+          comment={comment}
+          onDelete={handleDelete}
+        />
+      ))}
     </div>
   );
 }

@@ -49,6 +49,7 @@ function Article() {
           <ArticleMeta
             author={article?.author}
             createdAt={article?.createdAt}
+            article={article}
           />
         </div>
       </div>
@@ -74,6 +75,7 @@ function Article() {
           <ArticleMeta
             author={article?.author}
             createdAt={article?.createdAt}
+            article={article}
           />
         </div>
         <div className="row">

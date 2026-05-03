@@ -1,15 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { API_BASE_URL } from "../constants";
 
 const getArticleComments = async (slug) => {
   const { data } = await axios.get(
-    `https://blogging-website-backend-9gfs.onrender.com/api/articles/${slug}/comments`,
+    `${API_BASE_URL}/api/articles/${slug}/comments`,
   );
-
-  //   console.log("getCurrentUser", { data });
-
   return data;
 };
 
@@ -21,12 +18,12 @@ function useArticleCommentsQuery() {
     data: articleComments,
     error: articleCommentsError,
   } = useQuery({
-    queryKey: ["articleComments"],
+    queryKey: ["articleComments", slug],
     queryFn: async () => {
       const data = await getArticleComments(slug);
       return data;
     },
-
+    enabled: !!slug,
     refetchOnWindowFocus: true,
     staleTime: 0,
     cacheTime: 0,
