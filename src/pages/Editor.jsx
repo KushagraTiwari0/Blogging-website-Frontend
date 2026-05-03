@@ -7,6 +7,7 @@ import { FormErrors, TagsInput } from "../components";
 import useCreateArticle from "../hooks/useCreateArticle";
 import { useUpdateArticle } from "../hooks";
 import { useParams } from "react-router-dom";
+import { API_BASE_URL } from "../constants";
 
 function Editor() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ function Editor() {
       const fetchArticle = async () => {
         setIsLoadingArticle(true);
         try {
-          const { data } = await axios.get(`${axios.defaults.baseURL || 'https://blogging-website-backend-9gfs.onrender.com'}/api/articles/${slug}`);
+          const { data } = await axios.get(`${API_BASE_URL}/api/articles/${slug}`);
           const { title, description, body, tagList } = data.article;
           setInitialValues({ title, description, body, tagList });
         } catch (error) {
