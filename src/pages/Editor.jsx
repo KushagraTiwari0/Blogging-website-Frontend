@@ -5,24 +5,52 @@ import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { FormErrors, TagsInput } from "../components";
 import useCreateArticle from "../hooks/useCreateArticle";
+import { useUpdateArticle } from "../hooks";
+import { useParams } from "react-router-dom";
 
 function Editor() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
+  const { slug } = useParams();
+  const [initialValues, setInitialValues] = React.useState({
+    title: "",
+    description: "",
+    body: "",
+    tagList: [],
+  });
+  const [isLoadingArticle, setIsLoadingArticle] = React.useState(false);
 
   const { isCreating, createArticle } = useCreateArticle();
+  const { isUpdating, updateArticle } = useUpdateArticle();
+
+  React.useEffect(() => {
+    if (slug) {
+      const fetchArticle = async () => {
+        setIsLoadingArticle(true);
+        try {
+          const { data } = await axios.get(`${axios.defaults.baseURL || 'https://blogging-website-backend-9gfs.onrender.com'}/api/articles/${slug}`);
+          const { title, description, body, tagList } = data.article;
+          setInitialValues({ title, description, body, tagList });
+        } catch (error) {
+          console.error("Error fetching article for editing:", error);
+        } finally {
+          setIsLoadingArticle(false);
+        }
+      };
+      fetchArticle();
+    }
+  }, [slug]);
 
   async function onSubmit(values, { setErrors }) {
     try {
-    
-      createArticle({values})
-
+      if (slug) {
+        updateArticle({ slug, values });
+      } else {
+        createArticle({ values });
+      }
       queryClient.invalidateQueries(["articles"]);
-
     } catch (error) {
       const { status, data } = error.response;
-
       if (status === 422) {
         setErrors(data.errors);
       }
@@ -34,16 +62,14 @@ function Editor() {
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">
-            <Formik
-              onSubmit={onSubmit}
-              initialValues={{
-                title: "",
-                description: "",
-                body: "",
-                tagList: [],
-              }}
-              enableReinitialize
-            >
+            {isLoadingArticle ? (
+              <p>Loading article data...</p>
+            ) : (
+              <Formik
+                onSubmit={onSubmit}
+                initialValues={initialValues}
+                enableReinitialize
+              >
               {({ isSubmitting }) => (
                 <>
                   <FormErrors />
@@ -85,13 +111,14 @@ function Editor() {
                         className="btn btn-lg pull-xs-right btn-primary"
                         type="submit"
                       >
-                        Publish Article
+                        {slug ? "Update Article" : "Publish Article"}
                       </button>
                     </fieldset>
                   </Form>
                 </>
               )}
             </Formik>
+            )}
           </div>
         </div>
       </div>
