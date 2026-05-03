@@ -7,21 +7,20 @@ import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../constants";
 
 function Settings() {
-  const { logout, login } = useAuth();
-  const {
-    isCurrentUserLoading,
-    currentUser,
-    currentUserError,
-  } = useUserQuery();
+  const { logout, login, authUser } = useAuth();          // ← local snapshot as instant fallback
+  const { isCurrentUserLoading, currentUser, currentUserError } = useUserQuery();
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  async function onSubmit(values, { setErrors }) {
+  // Prefer the fresh API response; fall back to the locally-stored auth snapshot
+  // (available immediately, even before the network call returns)
+  const user = currentUser?.user ?? authUser ?? {};
+
+  async function onSubmit(values, { setErrors, setStatus }) {
     try {
-      // Remove empty password so it doesn't overwrite with blank
       const payload = { ...values };
-      if (!payload.password) delete payload.password;
+      if (!payload.password) delete payload.password;   // blank password → don't overwrite
 
       const { data } = await axios.put(
         `${API_BASE_URL}/api/user`,
@@ -32,29 +31,20 @@ function Settings() {
 
       login(data?.user);
 
+      queryClient.invalidateQueries(["currentUser"]);
       queryClient.invalidateQueries([`/profiles/${updatedUsername}`]);
       queryClient.invalidateQueries([`/user`]);
-      queryClient.invalidateQueries(["currentUser"]);
 
       navigate(`/profile/${updatedUsername}`);
     } catch (error) {
-      const { status, data } = error.response;
-      if (status === 422) {
-        setErrors(data.errors);
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 422) setErrors(data.errors);
+        else setStatus({ apiError: `Error ${status}: ${data?.message || "Something went wrong"}` });
+      } else {
+        setStatus({ apiError: "Network error — is the backend running?" });
       }
     }
-  }
-
-  if (isCurrentUserLoading) {
-    return (
-      <div className="settings-page">
-        <div className="container page">
-          <p style={{ textAlign: "center", color: "var(--muted)", fontFamily: "var(--font-ui)", fontSize: "0.82rem", letterSpacing: "0.1em" }}>
-            Loading settings…
-          </p>
-        </div>
-      </div>
-    );
   }
 
   return (
@@ -64,51 +54,69 @@ function Settings() {
           <div className="col-md-6 offset-md-3 col-xs-12">
             <h1 className="text-xs-center">Your Settings</h1>
 
+            {currentUserError && (
+              <div className="settings-fetch-error">
+                ⚠ Could not load your settings from server — showing cached data.
+              </div>
+            )}
+
             <Formik
               onSubmit={onSubmit}
               initialValues={{
-                image: currentUser?.user?.image || "",
-                username: currentUser?.user?.username || "",
-                bio: currentUser?.user?.bio || "",
-                email: currentUser?.user?.email || "",
+                image:    user.image    || "",
+                username: user.username || "",
+                bio:      user.bio      || "",
+                email:    user.email    || "",
                 password: "",
               }}
-              enableReinitialize
+              enableReinitialize   // re-populate once API data arrives
             >
-              {({ isSubmitting }) => (
+              {({ isSubmitting, status }) => (
                 <>
+                  {status?.apiError && (
+                    <div className="error-messages">{status.apiError}</div>
+                  )}
+
                   <Form>
                     <fieldset disabled={isSubmitting}>
 
+                      {/* Profile picture URL */}
                       <fieldset className="form-group">
+                        <label className="settings-label">Profile Picture URL</label>
                         <Field
                           type="url"
                           name="image"
-                          placeholder="URL of profile picture"
+                          placeholder="https://…"
                           className="form-control"
                         />
                       </fieldset>
 
+                      {/* Username — pre-filled */}
                       <fieldset className="form-group">
+                        <label className="settings-label">Username</label>
                         <Field
                           type="text"
                           name="username"
-                          placeholder="Your username"
+                          placeholder="Username"
                           className="form-control form-control-lg"
                         />
                       </fieldset>
 
+                      {/* Bio */}
                       <fieldset className="form-group">
+                        <label className="settings-label">Bio</label>
                         <Field
                           as="textarea"
                           name="bio"
                           placeholder="Short bio about you"
                           className="form-control"
-                          rows={4}
+                          rows={3}
                         />
                       </fieldset>
 
+                      {/* Email — pre-filled */}
                       <fieldset className="form-group">
+                        <label className="settings-label">Email</label>
                         <Field
                           type="email"
                           name="email"
@@ -117,11 +125,13 @@ function Settings() {
                         />
                       </fieldset>
 
+                      {/* Password — always blank */}
                       <fieldset className="form-group">
+                        <label className="settings-label">New Password</label>
                         <Field
                           type="password"
                           name="password"
-                          placeholder="New password (leave blank to keep current)"
+                          placeholder="Leave blank to keep current password"
                           className="form-control form-control-lg"
                         />
                       </fieldset>
@@ -129,17 +139,16 @@ function Settings() {
                       <button
                         type="submit"
                         className="btn btn-lg btn-primary pull-xs-right"
+                        disabled={isSubmitting}
                       >
-                        Update Settings
+                        {isSubmitting ? "Saving…" : "Update Settings"}
                       </button>
                     </fieldset>
                   </Form>
+
                   <hr />
                   <button
-                    onClick={() => {
-                      logout();
-                      navigate("/");
-                    }}
+                    onClick={() => { logout(); navigate("/"); }}
                     type="button"
                     className="btn btn-outline-danger"
                   >

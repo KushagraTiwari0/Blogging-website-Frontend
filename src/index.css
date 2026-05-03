@@ -902,3 +902,29 @@ hr {
 .settings-page .form-group:last-of-type {
   margin-bottom: 24px;
 }
+
+.settings-label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.settings-fetch-error {
+  background: #fffbeb;
+  border: 1px solid #f6d860;
+  color: #92400e;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+}
+body.dark .settings-fetch-error {
+  background: #1c1a00;
+  border-color: #6b5a00;
+  color: #fcd34d;
+}
