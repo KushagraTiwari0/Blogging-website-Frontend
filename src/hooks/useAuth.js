@@ -1,37 +1,41 @@
 
 import React from 'react'
-import { proxy, useSnapshot,snapshot } from 'valtio';
+import { proxy, useSnapshot, snapshot } from 'valtio';
 import axios from 'axios';
 import { isEmpty } from 'lodash-es';
 //proxy object
 
-function getAuthUser(){
+function getAuthUser() {
     const jwt = window.localStorage.getItem('jwtToken');
 
-    if(!jwt) return {};
+    if (!jwt) return {};
 
-    return JSON.parse(atob(jwt))
+    return JSON.parse(atob(jwt));
 }
-const state = proxy(
-    {
-        authUser:getAuthUser(),
 
-    },
-   
-);
+const state = proxy({
+    authUser: getAuthUser(),
+});
 
-const isAuth  = snapshot(state);
+// ── Restore axios auth header on every page load ──────────────
+const _initUser = state.authUser;
+if (_initUser?.token) {
+    axios.defaults.headers.Authorization = `Token ${_initUser.token}`;
+}
+
+const isAuth = snapshot(state);
 const actions = {
     login: (user) => {
-        console.log('login',{user,state});
+        console.log('login', { user, state });
         state.authUser = user;
         window.localStorage.setItem('jwtToken', btoa(JSON.stringify(state.authUser)));
 
         axios.defaults.headers.Authorization = `Token ${state.authUser.token}`;
     },
-    logout:() => {
+    logout: () => {
         state.authUser = {};
         window.localStorage.removeItem('jwtToken');
+        delete axios.defaults.headers.Authorization;
     }
 };
 
