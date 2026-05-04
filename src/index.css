@@ -1210,50 +1210,44 @@ body.dark .auth-error-msg { color: #e57373; }
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  color: rgba(255,255,255,0.85);
+  color: var(--muted);
   transition: opacity 0.2s;
 }
-.profile-stat-btn:hover { opacity: 0.7; }
+.profile-stat-btn:hover { opacity: 0.65; }
 .profile-stat-btn strong {
   font-family: var(--font-display);
   font-size: 1.3rem;
-  color: #fff;
+  line-height: 1;
+  color: var(--near-black);
 }
 .profile-stat-btn span {
   font-family: var(--font-ui);
   font-size: 0.65rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: var(--muted);
 }
 
 .profile-stat-divider {
   width: 1px;
   height: 32px;
-  background: rgba(255,255,255,0.2);
+  background: var(--rule-dark);
 }
 
 .profile-actions { margin-top: 16px; }
 
-.profile-action-btn { min-width: 140px; }
+.profile-action-btn { min-width: 140px; margin-top: 4px; }
 
 .btn-follow-active {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.5);
-  color: #fff;
+  background: var(--black);
+  border: 1px solid var(--black);
+  color: var(--bg);
 }
 .btn-follow-active:hover {
-  background: rgba(255,255,255,0.08);
+  background: var(--dark);
+  border-color: var(--dark);
+  color: var(--bg);
 }
-
-.profile-empty {
-  font-family: var(--font-ui);
-  font-size: 0.82rem;
-  color: var(--muted);
-  text-align: center;
-  padding: 40px 0;
-  letter-spacing: 0.06em;
-}
-
 /* ── Followers / Following Modal ──────────────────────────── */
 .modal-overlay {
   position: fixed;
