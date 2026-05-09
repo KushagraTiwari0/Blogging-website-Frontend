@@ -16,6 +16,7 @@ const getAllArticles = async (filters) => {
   if (filters?.author) params.author = filters.author;
   if (filters?.favorited) params.favorited = filters.favorited;
 
+  console.log(`[API] Fetching articles: ${url}`, { params });
   const { data } = await axios.get(url, { params });
 
   return data;

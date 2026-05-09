@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ArticleList } from "../components";
-import { useAuth } from "../hooks";
+import { useAuth, useArticlesQuery } from "../hooks";
 import { API_BASE_URL } from "../constants";
 
 const DEFAULT_AVATAR = (username) =>
@@ -62,6 +62,15 @@ function Profile() {
   const [modalUsers, setModalUsers] = useState([]);
   const [isLoading,  setIsLoading]  = useState(true);
   const [error,      setError]      = useState(null);
+  
+  const articleFilters =
+    tab === "favorited"
+      ? { favorited: username }
+      : { author: username };
+
+  const { isArticlesLoading, articles, ArticlesError } = useArticlesQuery(articleFilters);
+
+  console.log("[PROFILE] Articles state:", { tab, articleFilters, articles, isArticlesLoading });
 
   // ── Fetch profile ────────────────────────────────────────
   useEffect(() => {
@@ -129,11 +138,6 @@ function Profile() {
     profile.image !== "https://api.realworld.io/images/smiley-cyrus.jpeg"
       ? profile.image
       : DEFAULT_AVATAR(profile.username);
-
-  const articleFilters =
-    tab === "favorited"
-      ? { favorited: `@${username}` }
-      : { author: `@${username}` };
 
   return (
     <div className="profile-page">
@@ -218,7 +222,11 @@ function Profile() {
               </ul>
             </div>
 
-            <ArticleList filters={articleFilters} />
+            <ArticleList 
+              isArticlesLoading={isArticlesLoading}
+              articles={articles}
+              ArticlesError={ArticlesError}
+            />
 
           </div>
         </div>
