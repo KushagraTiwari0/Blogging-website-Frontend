@@ -273,12 +273,6 @@ img { max-width: 100%; display: block; }
   overflow: visible;
 }
 
-.banner img {
-  display: block;
-  margin: 0 auto 20px;
-  max-width: 800px;
-  width: 100%;
-}
 
 .banner::before { display: none; }
 
