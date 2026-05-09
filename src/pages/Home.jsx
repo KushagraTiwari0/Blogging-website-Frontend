@@ -72,8 +72,7 @@ function Home() {
     <div className="home-page">
       <div className="banner">
         <div className="container">
-          <img src="/Name.jpg" alt="Blogging" style={{ maxWidth: '400px', width: '100%', marginBottom: '1rem' }} />
-          <p>A place to share your knowledge.</p>
+          <img src="/Name.jpg" alt="Blogging" />
         </div>
       </div>
 
