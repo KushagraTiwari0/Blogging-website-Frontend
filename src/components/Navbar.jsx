@@ -37,7 +37,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="container">
         <NavLink className="navbar-brand" to="/" end>
-          Blogging App
+          <img src="/Logo.jpg" alt="Logo" style={{ height: '40px', verticalAlign: 'middle' }} />
         </NavLink>
 
         <ul className="nav navbar-nav pull-xs-right">

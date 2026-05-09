@@ -21,6 +21,7 @@ function ArticlePreview({ article }) {
           <img
             src={article.author.image && article.author.image !== "https://api.realworld.io/images/smiley-cyrus.jpeg" ? article.author.image : `https://api.dicebear.com/9.x/thumbs/svg?seed=${article.author.username}`}
             alt={article.author.username}
+            loading="lazy"
           />
         </Link>
         <div className="info">

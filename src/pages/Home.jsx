@@ -5,14 +5,14 @@ import { useArticlesQuery, useAuth } from "../hooks";
 import axios from "axios";
 import { API_BASE_URL } from "../constants";
 
-const initialFilters = { tag: "", offset: null, feed: false };
+const initialFilters = { tag: "", offset: 0, limit: 10, feed: false };
 
 function Home() {
   const { isAuth, authUser } = useAuth();
 
-  const [filters,        setFilters]        = React.useState({ ...initialFilters, feed: isAuth });
-  const [feedEmpty,      setFeedEmpty]      = React.useState(false); // true when user follows nobody
-  const [feedChecked,    setFeedChecked]    = React.useState(false); // avoid flicker
+  const [filters, setFilters] = React.useState({ ...initialFilters, feed: isAuth });
+  const [feedEmpty, setFeedEmpty] = React.useState(false);
+  const [feedChecked, setFeedChecked] = React.useState(false);
 
   const { isArticlesLoading, articles, ArticlesError } = useArticlesQuery(filters);
 
@@ -36,7 +36,6 @@ function Home() {
         const empty = !data.articles || data.articles.length === 0;
         setFeedEmpty(empty);
         setFeedChecked(true);
-        // If nobody followed yet, silently switch to global
         if (empty) setFilters(initialFilters);
       })
       .catch(() => {
@@ -53,33 +52,36 @@ function Home() {
   }
 
   function onFeedClick() {
-    if (feedEmpty) return; // nothing to show
+    if (feedEmpty) return;
     setFilters({ ...initialFilters, feed: true });
   }
 
-  const isYourFeed    = filters.feed && !filters.tag;
-  const isGlobalFeed  = !filters.feed && !filters.tag;
+  function onPageClick(page) {
+    setFilters({ ...filters, offset: page * filters.limit });
+    window.scrollTo(0, 0);
+  }
+
+  const isYourFeed = filters.feed && !filters.tag;
+  const isGlobalFeed = !filters.feed && !filters.tag;
+
+  const articlesCount = articles?.articlesCount || 0;
+  const totalPages = Math.ceil(articlesCount / filters.limit);
+  const currentPage = Math.floor(filters.offset / filters.limit);
 
   return (
     <div className="home-page">
-
-      {/* ── Banner ── */}
       <div className="banner">
         <div className="container">
-          <h1 className="logo-font">Blogging</h1>
+          <img src="/Name.jpg" alt="Blogging" style={{ maxWidth: '400px', width: '100%', marginBottom: '1rem' }} />
           <p>A place to share your knowledge.</p>
         </div>
       </div>
 
       <div className="container page">
         <div className="row">
-
-          {/* ── Main feed ── */}
           <div className="col-md-9">
             <div className="feed-toggle">
               <ul className="nav-pills">
-
-                {/* Your Feed tab — only shown when logged in */}
                 {isAuth && (
                   <li className="nav-item">
                     <button
@@ -96,7 +98,6 @@ function Home() {
                   </li>
                 )}
 
-                {/* Global Feed tab */}
                 <li className="nav-item">
                   <button
                     type="button"
@@ -107,7 +108,6 @@ function Home() {
                   </button>
                 </li>
 
-                {/* Active tag tab */}
                 {filters.tag && (
                   <li className="nav-item">
                     <button
@@ -122,7 +122,6 @@ function Home() {
               </ul>
             </div>
 
-            {/* Empty state for Your Feed */}
             {isAuth && isYourFeed && feedChecked && feedEmpty ? (
               <div className="feed-empty-state">
                 <p className="feed-empty-title">Your feed is empty</p>
@@ -136,18 +135,42 @@ function Home() {
                 </p>
               </div>
             ) : (
-              <ArticleList filters={filters} />
+              <>
+                <ArticleList 
+                   isArticlesLoading={isArticlesLoading}
+                   articles={articles}
+                   ArticlesError={ArticlesError}
+                />
+                
+                {totalPages > 1 && (
+                  <nav>
+                    <ul className="pagination">
+                      {Array.from({ length: totalPages }, (_, i) => (
+                        <li
+                          key={i}
+                          className={classNames("page-item", { active: i === currentPage })}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => onPageClick(i)}
+                          >
+                            {i + 1}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                )}
+              </>
             )}
           </div>
 
-          {/* ── Sidebar ── */}
           <div className="col-md-3">
             <div className="sidebar">
               <p>Popular Tags</p>
               <PopularTags onTagClick={onTagClick} />
             </div>
           </div>
-
         </div>
       </div>
     </div>

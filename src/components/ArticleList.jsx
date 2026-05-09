@@ -1,26 +1,18 @@
 import React from "react";
 import { isEmpty } from "lodash-es";
-import { useArticlesQuery } from "../hooks";
 import ArticlePreview from "./ArticlePreview";
 
-function ArticleList({ filters }) {
-  const { isArticlesLoading, articles, ArticlesError } = useArticlesQuery(filters);
-
+function ArticleList({ isArticlesLoading, articles, ArticlesError }) {
   if (isArticlesLoading)
     return <p className="article-preview">Loading articles...</p>;
 
   if (ArticlesError)
     return <p className="article-preview">Error loading articles. Please try again.</p>;
 
-  // API returns { articles: [...] } — unwrap the array
+  // API now returns { articles: [...], articlesCount: X }
   const articleList = articles?.articles ?? [];
 
-  // Sort newest first
-  const sortedArticles = [...articleList].sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-  );
-
-  if (isEmpty(sortedArticles))
+  if (isEmpty(articleList))
     return (
       <p className="article-preview">
         No articles are here... yet.
@@ -29,7 +21,7 @@ function ArticleList({ filters }) {
 
   return (
     <>
-      {sortedArticles.map((article) => (
+      {articleList.map((article) => (
         <ArticlePreview
           key={article.slug}
           article={article}

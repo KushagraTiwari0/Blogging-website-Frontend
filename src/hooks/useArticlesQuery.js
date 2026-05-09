@@ -8,7 +8,10 @@ const getAllArticles = async (filters) => {
     ? `${API_BASE_URL}/api/articles/feed`
     : `${API_BASE_URL}/api/articles`;
 
-  const params = {};
+  const params = {
+    limit: filters?.limit || 10,
+    offset: filters?.offset || 0,
+  };
   if (filters?.tag) params.tag = filters.tag;
   if (filters?.author) params.author = filters.author;
   if (filters?.favorited) params.favorited = filters.favorited;
@@ -26,9 +29,9 @@ function useArticlesQuery(filters) {
   } = useQuery({
     queryKey: ["articles", filters],
     queryFn: () => getAllArticles(filters),
-    refetchOnWindowFocus: true,
-    staleTime: 0,
-    cacheTime: 0,
+    refetchOnWindowFocus: false, // Reduced aggressiveness
+    staleTime: 300000, // 5 minutes
+    gcTime: 600000, // 10 minutes (replaces cacheTime in newer React Query)
   });
   return {
     isArticlesLoading,
