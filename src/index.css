@@ -719,16 +719,27 @@ fieldset[disabled] { opacity: 0.5; pointer-events: none; }
 }
 
 /* ── Errors ───────────────────────────────────────────────── */
-.error-messages {
-  background: #fdf0f0;
-  border: 1px solid #f0b8b8;
+/* ── Errors & Messages ────────────────────────────────────── */
+.error-messages, .success-messages, .info-messages {
+  background: transparent;
+  border: 1px solid var(--rule);
   border-radius: 0;
-  padding: 12px 16px;
-  margin-bottom: 20px;
-  color: #c0392b;
+  padding: 14px 18px;
+  margin-bottom: 24px;
   font-family: var(--font-ui);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  list-style: none;
 }
+
+.error-messages {
+  color: #c0392b;
+}
+
+.success-messages, .info-messages {
+  color: #2d7a2d;
+}
+
 .error-messages ul { list-style: disc; padding-left: 18px; }
 
 /* ── Misc ─────────────────────────────────────────────────── */
