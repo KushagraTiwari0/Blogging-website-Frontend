@@ -5,6 +5,7 @@ import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../constants";
+import { SEO } from "../components";
 
 function Settings() {
   const { logout, login, authUser } = useAuth();          // ← local snapshot as instant fallback
@@ -49,6 +50,11 @@ function Settings() {
 
   return (
     <div className="settings-page">
+      <SEO
+        title="Settings"
+        description="Update your Blogging profile settings."
+        noindex={true}
+      />
       <div className="container page">
         <div className="row">
           <div className="col-md-6 offset-md-3 col-xs-12">

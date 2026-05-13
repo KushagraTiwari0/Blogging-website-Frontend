@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React from "react";
-import { ArticleList, PopularTags } from "../components";
+import { ArticleList, PopularTags, SEO } from "../components";
 import { useArticlesQuery, useAuth } from "../hooks";
 import axios from "axios";
 import { API_BASE_URL } from "../constants";
@@ -70,6 +70,12 @@ function Home() {
 
   return (
     <div className="home-page">
+      <SEO
+        title="Home"
+        description="Discover articles, stories, and insights from writers on any topic. A place to share your knowledge."
+        url={window.location.href}
+        type="website"
+      />
       <div className="banner">
         <div className="container">
           <h1 className="logo-font">Blogging</h1>

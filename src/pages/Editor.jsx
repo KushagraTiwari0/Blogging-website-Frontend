@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import TurndownService from "turndown";
 import { gfm } from "turndown-plugin-gfm";
-import { FormErrors, TagsInput } from "../components";
+import { FormErrors, TagsInput, SEO } from "../components";
 import useCreateArticle from "../hooks/useCreateArticle";
 import { useUpdateArticle } from "../hooks";
 import { useParams } from "react-router-dom";
@@ -170,6 +170,11 @@ function Editor() {
 
   return (
     <div className="editor-page">
+      <SEO
+        title={slug ? "Edit Article" : "Write Article"}
+        description="Write and publish your article on Blogging."
+        noindex={true}
+      />
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">

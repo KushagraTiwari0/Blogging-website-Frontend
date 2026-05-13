@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ArticleList } from "../components";
+import { ArticleList, SEO } from "../components";
 import { useAuth, useArticlesQuery } from "../hooks";
 import { API_BASE_URL } from "../constants";
 
@@ -141,6 +141,13 @@ function Profile() {
 
   return (
     <div className="profile-page">
+      <SEO
+        title={`@${profile.username}`}
+        description={profile.bio || `Check out @${profile.username}'s profile and articles on Blogging.`}
+        url={window.location.href}
+        image={avatar}
+        type="profile"
+      />
 
       {/* ── Banner ── */}
       <div className="user-info">

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
-import { ArticleComments, ArticleMeta } from "../components";
+import { ArticleComments, ArticleMeta, SEO } from "../components";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_BASE_URL } from "../constants";
@@ -87,8 +87,42 @@ function Article() {
   const mdPlugins  = [remarkGfm, remarkBreaks];
   const articleUrl = window.location.href;
 
+  // Build JSON-LD structured data for search engines
+  const jsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.description,
+    datePublished: article.createdAt,
+    dateModified: article.updatedAt || article.createdAt,
+    author: {
+      "@type": "Person",
+      name: article.author?.username || "Unknown",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Blogging",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": articleUrl,
+    },
+    keywords: article.tagList?.join(", ") || "",
+  });
+
   return (
-    <div className="article-page">
+    <article className="article-page">
+      <SEO
+        title={article.title}
+        description={article.description || `Read ${article.title} on Blogging`}
+        url={articleUrl}
+        type="article"
+        author={article.author?.username}
+        publishedTime={article.createdAt}
+        modifiedTime={article.updatedAt}
+        tags={article.tagList || []}
+        jsonLd={jsonLd}
+      />
 
       {/* ── Banner ────────────────────────────────────────── */}
       <div className="article-banner">
@@ -154,7 +188,7 @@ function Article() {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 

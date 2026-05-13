@@ -4,6 +4,7 @@ import { Link, useMatch, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../hooks";
 import { API_BASE_URL } from "../constants";
+import { SEO } from "../components";
 
 // ── OTP Step Component ────────────────────────────────────────────────────────
 function OTPStep({ email, isRegister, onSuccess, onBack }) {
@@ -291,6 +292,11 @@ function Auth() {
 
   return (
     <div className="auth-page">
+      <SEO
+        title={otpStep ? "Verify Email" : isRegister ? "Sign Up" : "Sign In"}
+        description={isRegister ? "Create a free account on Blogging and start sharing your knowledge." : "Sign in to your Blogging account to read and write articles."}
+        url={window.location.href}
+      />
       <div className="container page">
         <div className="row">
           <div className="col-md-6 offset-md-3 col-xs-12">
