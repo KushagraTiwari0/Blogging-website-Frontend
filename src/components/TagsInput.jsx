@@ -7,17 +7,21 @@ function TagsInput({ field, form }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const availableTags = tags?.tags || [];
-  
-  // Filter suggestions based on input, excluding already selected tags
+
+  // Lowercase set of already-selected tags for fast case-insensitive lookup
+  const selectedLower = new Set((field.value || []).map(t => t.toLowerCase()));
+
+  // Filter suggestions based on input, excluding already selected tags (case-insensitive)
   const suggestions = availableTags.filter(tag => 
     tag.toLowerCase().includes(inputValue.toLowerCase()) && 
-    !(field.value || []).includes(tag)
+    !selectedLower.has(tag.toLowerCase())
   );
 
   const handleAddTag = (tag) => {
-    if (!tag.trim()) return;
-    if (!(field.value || []).includes(tag)) {
-      form.setFieldValue(field.name, [...(field.value || []), tag]);
+    const normalized = tag.trim().toLowerCase();
+    if (!normalized) return;
+    if (!selectedLower.has(normalized)) {
+      form.setFieldValue(field.name, [...(field.value || []), normalized]);
     }
     setInputValue('');
     setShowSuggestions(false);
