@@ -82,7 +82,7 @@ function Navbar() {
                     alt="avatar" 
                     className="nav-avatar" 
                   />
-                  <span>{authUser?.username}</span>
+                  <span>{authUser?.username?.split(' ')[0]}</span>
                 </NavLink>
               </li>
             </>
