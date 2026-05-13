@@ -9,6 +9,11 @@ import "../Navbar.css"; // Make sure to import your CSS file
 function Navbar() {
   const { isAuth, authUser } = useAuth();
   const [theme, setTheme] = useState("light");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   // Update the theme in the document body
   useEffect(() => {
@@ -36,11 +41,32 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="container">
-        <NavLink className="navbar-brand" to="/" end>
+        <NavLink className="navbar-brand" to="/" end onClick={() => setIsMobileMenuOpen(false)}>
           <img src="/Logo.jpg" alt="Logo" style={{ height: '40px', verticalAlign: 'middle' }} />
         </NavLink>
 
-        <ul className="nav navbar-nav pull-xs-right">
+        <button 
+          className="mobile-menu-btn" 
+          onClick={toggleMobileMenu}
+          aria-label="Toggle Navigation"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {isMobileMenuOpen ? (
+              <>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </>
+            ) : (
+              <>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </>
+            )}
+          </svg>
+        </button>
+
+        <ul className={`nav navbar-nav pull-xs-right ${isMobileMenuOpen ? 'mobile-open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
           <li className="nav-item">
             <NavLink
               className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
