@@ -1396,3 +1396,77 @@ body.dark .auth-error-msg { color: #e57373; }
 /* ── Profile follow btn tweaks ────────────────────────────── */
 .profile-stat-btn strong { line-height: 1; }
 .profile-action-btn { margin-top: 4px; }
+
+/* ── Google Auth ─────────────────────────────────────────── */
+.google-auth-section {
+  margin-bottom: 0;
+}
+
+.google-btn-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+/* Make the Google button container fill width */
+.google-btn-wrapper > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Style the Google iframe button to be wider */
+.google-btn-wrapper iframe {
+  width: 100% !important;
+  min-width: 250px;
+}
+
+.google-signin-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 24px;
+  border: 1px solid var(--rule-dark);
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.google-signin-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--rule);
+  border-top: 2px solid var(--black);
+  border-radius: 50%;
+  animation: google-spin 0.7s linear infinite;
+}
+
+@keyframes google-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Auth Divider (OR) ────────────────────────────────────── */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule-dark);
+}
+
+.auth-divider-text {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--light-muted);
+}
