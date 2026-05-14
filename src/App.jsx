@@ -4,6 +4,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Link,
 } from "react-router-dom";
 import {
   AuthRoute,
@@ -17,6 +18,8 @@ import {
   Home,
   Settings,
   Profile,
+  PrivacyPolicy,
+  TermsOfService,
 } from "./pages";
 import axios from "axios";
 
@@ -105,8 +108,16 @@ function App() {
               path="/profile/:slug"
               element={<Profile />}
             />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
           </Routes>
         </main>
+        <footer style={{ textAlign: "center", padding: "20px", marginTop: "20px", borderTop: "1px solid #eaeaea" }}>
+          <p>
+            <Link to="/privacy" style={{ marginRight: "15px", color: "inherit", textDecoration: "none" }}>Privacy Policy</Link>
+            <Link to="/terms" style={{ color: "inherit", textDecoration: "none" }}>Terms of Service</Link>
+          </p>
+        </footer>
       </div>
     </Router>
   );
