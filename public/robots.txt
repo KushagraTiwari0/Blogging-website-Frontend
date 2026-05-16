@@ -1,6 +1,14 @@
 User-agent: *
 Allow: /
+
+# Disallow private / auth-only pages
 Disallow: /settings
 Disallow: /editor
+Disallow: /login
+Disallow: /register
 
+# Crawl delay (be polite to the server)
+Crawl-delay: 10
+
+# Sitemap — served dynamically by the Express backend
 Sitemap: https://blogging-website-backend-9gfs.onrender.com/sitemap.xml
