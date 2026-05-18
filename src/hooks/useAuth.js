@@ -39,6 +39,18 @@ const actions = {
     }
 };
 
+// Add interceptor to handle token expiry
+axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+            actions.logout();
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
 
 function useAuth() {
     const snap = useSnapshot(state);

@@ -1,9 +1,9 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { IS_AUTHENTICATED } from "../constants";
+import useAuth from "../hooks/useAuth";
 
 function GuestRoute() {
-  const isAuth = IS_AUTHENTICATED;
+  const { isAuth } = useAuth();
 
   if (isAuth) return <Navigate to="/" />;
 
