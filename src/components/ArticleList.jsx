@@ -1,10 +1,17 @@
 import React from "react";
 import { isEmpty } from "lodash-es";
 import ArticlePreview from "./ArticlePreview";
+import SkeletonCard from "./SkeletonCard";
 
 function ArticleList({ isArticlesLoading, articles, ArticlesError }) {
   if (isArticlesLoading)
-    return <p className="article-preview">Loading articles...</p>;
+    return (
+      <>
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+      </>
+    );
 
   if (ArticlesError)
     return <p className="article-preview">Error loading articles. Please try again.</p>;

@@ -14,14 +14,4 @@ export {default as ArticleComments} from './ArticleComments';
 
 export {default as ArticleComment} from './ArticleComment';
 export {default as SEO} from './SEO';
-
-
-
-
-
-
-
-
-
-
-
+export {default as SkeletonCard} from './SkeletonCard';
