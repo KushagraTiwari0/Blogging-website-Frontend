@@ -1518,3 +1518,170 @@ body.dark .auth-error-msg { color: #e57373; }
   text-transform: uppercase;
   color: var(--light-muted);
 }
+
+/* ── Callout Box & Markdown Dropdown ──────────────────────── */
+.md-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.md-dropdown-toggle {
+  cursor: pointer;
+}
+
+.md-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  display: none;
+  min-width: 150px;
+  background: var(--bg);
+  border: 1px solid var(--rule-dark);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 4px 0;
+  margin-top: 0;
+}
+
+.md-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: transparent;
+}
+
+.md-dropdown:hover .md-dropdown-menu {
+  display: block;
+}
+
+.md-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--body-text);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.md-dropdown-item:hover {
+  background: var(--surface-hover);
+  color: var(--black);
+}
+
+.callout-box {
+  position: relative;
+  margin: 2.5rem 0;
+  padding: 2rem 2.2rem 2rem 2.2rem;
+  border: 2px solid var(--callout-border, var(--rule-dark));
+  background: var(--bg);
+  border-radius: 0;
+  font-family: var(--font-body);
+  color: var(--body-text);
+}
+
+.callout-badge-tl {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  width: 40px;
+  height: 40px;
+  background: var(--bg);
+  border: 2px solid var(--callout-border, var(--rule-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--callout-border);
+  z-index: 2;
+}
+
+.callout-badge-tl svg {
+  width: 18px;
+  height: 18px;
+}
+
+.callout-badge-br {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 40px;
+  height: 40px;
+  background: var(--bg);
+  border: 2px solid var(--callout-border, var(--rule-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--callout-border);
+  z-index: 2;
+}
+
+.callout-quote {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 10px; /* visual alignment offset */
+}
+
+.callout-title {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--callout-title-color, var(--near-black));
+  margin-bottom: 0.75rem;
+}
+
+.callout-content {
+  font-size: 1.02rem;
+  line-height: 1.8;
+  color: var(--body-text);
+}
+
+.markdown-body .callout-content p {
+  margin-bottom: 0.75rem;
+}
+
+.markdown-body .callout-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Callout Types styling */
+/* NOTE (Blue Theme) */
+.callout-note {
+  --callout-border: #3b82f6;
+  --callout-title-color: #3b82f6;
+}
+
+/* TIP (Green Theme) */
+.callout-tip {
+  --callout-border: #10b981;
+  --callout-title-color: #10b981;
+}
+
+/* IMPORTANT (Purple Theme) */
+.callout-important {
+  --callout-border: #8b5cf6;
+  --callout-title-color: #8b5cf6;
+}
+
+/* WARNING (Yellow/Amber Theme) */
+.callout-warning {
+  --callout-border: #f59e0b;
+  --callout-title-color: #f59e0b;
+}
+
+/* CAUTION (Red Theme) */
+.callout-caution {
+  --callout-border: #ef4444;
+  --callout-title-color: #ef4444;
+}

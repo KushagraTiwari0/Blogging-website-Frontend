@@ -36,6 +36,14 @@ const TOOLBAR_ACTIONS = [
   { label: "🖼",     title: "Image",           wrap: ["![", "](url)"],      sample: "alt text"       },
 ];
 
+const CALLOUT_ACTIONS = [
+  { label: "💡 Note",      title: "Note Callout",      wrap: ["> [!NOTE]\n> ", ""],      sample: "Note content"      },
+  { label: "⚡ Tip",       title: "Tip Callout",       wrap: ["> [!TIP]\n> ", ""],       sample: "Tip content"       },
+  { label: "🔑 Important", title: "Important Callout", wrap: ["> [!IMPORTANT]\n> ", ""], sample: "Important content" },
+  { label: "⚠️ Warning",   title: "Warning Callout",   wrap: ["> [!WARNING]\n> ", ""],   sample: "Warning content"   },
+  { label: "🛑 Caution",   title: "Caution Callout",   wrap: ["> [!CAUTION]\n> ", ""],   sample: "Caution content"   },
+];
+
 function applyFormat(textarea, action, currentValue, setFieldValue, fieldName) {
   const start = textarea.selectionStart;
   const end   = textarea.selectionEnd;
@@ -103,6 +111,34 @@ function MarkdownToolbar({ textareaRef, value, setFieldValue, fieldName }) {
             {action.label}
           </button>
         ))}
+
+        <div className="md-dropdown">
+          <button
+            type="button"
+            title="Insert Callout Box"
+            className="md-btn md-dropdown-toggle"
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            💬 Callout ▾
+          </button>
+          <div className="md-dropdown-menu">
+            {CALLOUT_ACTIONS.map((action) => (
+              <button
+                key={action.title}
+                type="button"
+                className="md-dropdown-item"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  if (textareaRef.current) {
+                    applyFormat(textareaRef.current, action, value || "", setFieldValue, fieldName);
+                  }
+                }}
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
       <button
         type="button"
