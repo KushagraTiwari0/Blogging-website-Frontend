@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ArticleList, SEO } from "../components";
+import { ArticleList, SEO, SkeletonProfile } from "../components";
 import { useAuth, useArticlesQuery } from "../hooks";
 import { API_BASE_URL } from "../constants";
 
@@ -130,7 +130,7 @@ function Profile() {
     }
   };
 
-  if (isLoading) return <div className="page container loading-indicator">Loading profile...</div>;
+  if (isLoading) return <SkeletonProfile />;
   if (error || !profile) return <div className="page container loading-indicator">{error || "Profile not found"}</div>;
 
   const avatar =

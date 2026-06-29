@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./SkeletonCard.css";
 import {
   useArticleCommentsQuery,
   useAuth,
@@ -34,7 +35,23 @@ function ArticleComments() {
   }
 
   if (isArticleCommentsLoading) {
-    return <p>Loading comments...</p>;
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        {[1, 2].map((i) => (
+          <div key={i} className="card" style={{ padding: "20px", pointerEvents: "none" }}>
+            <div className="card-block">
+              <div className="skeleton" style={{ height: "14px", width: "90%", marginBottom: "8px" }}></div>
+              <div className="skeleton" style={{ height: "14px", width: "60%" }}></div>
+            </div>
+            <div className="card-footer" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <div className="skeleton" style={{ width: "20px", height: "20px", borderRadius: "50%" }}></div>
+              <div className="skeleton" style={{ width: "80px", height: "12px" }}></div>
+              <div className="skeleton" style={{ width: "100px", height: "12px" }}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (articleCommentsError) {

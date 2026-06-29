@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
-import { ArticleComments, ArticleMeta, SEO } from "../components";
+import { ArticleComments, ArticleMeta, SEO, SkeletonArticle } from "../components";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_BASE_URL } from "../constants";
@@ -230,7 +230,7 @@ function Article() {
       .finally(() => setIsLoading(false));
   }, [slug]);
 
-  if (isLoading) return <div className="page container loading-indicator">Loading article...</div>;
+  if (isLoading) return <SkeletonArticle />;
   if (error || !article) return <div className="page container loading-indicator">{error || "Article not found"}</div>;
 
   const mdPlugins  = [remarkGfm, remarkBreaks];

@@ -15,3 +15,5 @@ export {default as ArticleComments} from './ArticleComments';
 export {default as ArticleComment} from './ArticleComment';
 export {default as SEO} from './SEO';
 export {default as SkeletonCard} from './SkeletonCard';
+export {default as SkeletonArticle} from './SkeletonArticle';
+export {default as SkeletonProfile} from './SkeletonProfile';
