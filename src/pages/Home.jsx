@@ -173,7 +173,6 @@ function Home() {
 
           <div className="col-md-3">
             <div className="sidebar">
-              <p>Popular Tags</p>
               <PopularTags onTagClick={onTagClick} />
             </div>
           </div>
