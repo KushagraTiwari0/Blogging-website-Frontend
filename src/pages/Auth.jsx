@@ -435,6 +435,7 @@ function Auth() {
                               type="text"
                               name="username"
                               placeholder="Your Name"
+                              maxLength={100}
                               className="form-control form-control-lg"
                             />
                           </fieldset>
@@ -445,6 +446,7 @@ function Auth() {
                             type="email"
                             name="email"
                             placeholder="Email"
+                            maxLength={254}
                             className="form-control form-control-lg"
                           />
                         </fieldset>
@@ -454,6 +456,7 @@ function Auth() {
                             type="password"
                             name="password"
                             placeholder="Password"
+                            maxLength={72}
                             className="form-control form-control-lg"
                           />
                         </fieldset>

@@ -93,6 +93,7 @@ function Settings() {
                           type="url"
                           name="image"
                           placeholder="https://…"
+                          maxLength={2048}
                           className="form-control"
                         />
                       </fieldset>
@@ -104,6 +105,7 @@ function Settings() {
                           type="text"
                           name="username"
                           placeholder="Username"
+                          maxLength={100}
                           className="form-control form-control-lg"
                         />
                       </fieldset>
@@ -115,6 +117,7 @@ function Settings() {
                           as="textarea"
                           name="bio"
                           placeholder="Short bio about you"
+                          maxLength={1000}
                           className="form-control"
                           rows={3}
                         />
@@ -127,6 +130,7 @@ function Settings() {
                           type="email"
                           name="email"
                           placeholder="Email"
+                          maxLength={254}
                           className="form-control form-control-lg"
                         />
                       </fieldset>
@@ -138,6 +142,7 @@ function Settings() {
                           type="password"
                           name="password"
                           placeholder="Leave blank to keep current password"
+                          maxLength={72}
                           className="form-control form-control-lg"
                         />
                       </fieldset>
