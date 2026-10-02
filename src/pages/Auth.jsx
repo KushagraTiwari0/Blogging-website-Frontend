@@ -20,7 +20,7 @@ function GoogleIcon() {
 }
 
 // ── OTP Step Component ────────────────────────────────────────────────────────
-function OTPStep({ email, isRegister, onSuccess, onBack }) {
+function OTPStep({ email, isRegister, onSuccess, onBack, generatedOtp, setGeneratedOtp }) {
   const [otp, setOtp]             = useState(["", "", "", "", "", ""]);
   const [error, setError]         = useState("");
   const [success, setSuccess]     = useState("");
@@ -99,8 +99,11 @@ function OTPStep({ email, isRegister, onSuccess, onBack }) {
     console.log(`[OTP] Resending OTP to: ${email}`);
 
     try {
-      await axios.post(`${API_BASE_URL}/api/users/resend-otp`, { email });
+      const { data } = await axios.post(`${API_BASE_URL}/api/users/resend-otp`, { email });
       setSuccess("New OTP sent! Check your inbox.");
+      if (data.generatedOtp) {
+        setGeneratedOtp(data.generatedOtp);
+      }
     } catch (err) {
       console.error("[OTP] Resend error:", err.response?.data);
       setError(err.response?.data?.message || "Failed to resend OTP.");
@@ -109,7 +112,29 @@ function OTPStep({ email, isRegister, onSuccess, onBack }) {
   }
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div style={{ textAlign: "center", position: "relative" }}>
+      {generatedOtp && (
+        <div style={{
+          position: "fixed",
+          top: "20px",
+          left: "20px",
+          background: "#fff3cd",
+          color: "#856404",
+          border: "1px solid #ffeeba",
+          padding: "15px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          zIndex: 9999,
+          maxWidth: "350px",
+          textAlign: "left"
+        }}>
+          <strong>Notice:</strong> Due to free services, OTP can't be sent to mail.
+          <br /><br />
+          <strong>Your OTP is: {generatedOtp}</strong>
+          <br /><br />
+          <small>Please use this OTP. From next time, please login using Google.</small>
+        </div>
+      )}
 
       {/* Back link */}
       <p style={{ textAlign: "left", marginBottom: "16px" }}>
@@ -222,6 +247,7 @@ function Auth() {
   const [infoMessage, setInfoMessage]   = useState("");
   const [otpStep, setOtpStep]           = useState(false);
   const [pendingEmail, setPendingEmail] = useState("");
+  const [generatedOtp, setGeneratedOtp] = useState("");
   const [googleLoading, setGoogleLoading] = useState(false);
 
   // ── Google Auth Handlers ──────────────────────────────────────────────────
@@ -268,6 +294,7 @@ function Auth() {
       // Both register and login now return { step: "verify-otp" }
       if (data.step === "verify-otp") {
         setPendingEmail(data.email || values.email);
+        setGeneratedOtp(data.generatedOtp || "");
         setOtpStep(true);
         return;
       }
@@ -327,6 +354,7 @@ function Auth() {
   function handleOTPBack() {
     setOtpStep(false);
     setPendingEmail("");
+    setGeneratedOtp("");
     setAuthErrors([]);
     setInfoMessage("");
   }
@@ -365,6 +393,8 @@ function Auth() {
                 isRegister={!!isRegister}
                 onSuccess={handleOTPSuccess}
                 onBack={handleOTPBack}
+                generatedOtp={generatedOtp}
+                setGeneratedOtp={setGeneratedOtp}
               />
             ) : (
               <>
