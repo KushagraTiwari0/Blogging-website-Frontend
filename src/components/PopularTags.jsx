@@ -6,6 +6,7 @@ function PopularTags({ onTagClick }) {
     const [isSearching, setIsSearching] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
+    const [showTooltip, setShowTooltip] = useState(false);
     
     // Store click counts in state
     const [clickCounts, setClickCounts] = useState(() => {
@@ -111,21 +112,59 @@ function PopularTags({ onTagClick }) {
             paddingBottom: "12px" 
           }}
         >
-          <p 
-            style={{ 
-              margin: 0, 
-              border: "none", 
-              padding: 0, 
-              fontFamily: "var(--font-ui)", 
-              fontSize: "0.62rem", 
-              fontWeight: 700, 
-              letterSpacing: "0.2em", 
-              textTransform: "uppercase", 
-              color: "var(--muted)" 
-            }}
+          <div 
+            style={{ position: "relative" }}
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
           >
-            Popular Tags
-          </p>
+            <p 
+              style={{ 
+                margin: 0, 
+                border: "none", 
+                padding: 0, 
+                fontFamily: "var(--font-ui)", 
+                fontSize: "0.62rem", 
+                fontWeight: 700, 
+                letterSpacing: "0.2em", 
+                textTransform: "uppercase", 
+                color: "var(--muted)",
+                cursor: "help"
+              }}
+            >
+              Popular Tags
+            </p>
+            {showTooltip && (
+              <div style={{
+                position: "absolute",
+                top: "100%",
+                left: "0",
+                marginTop: "10px",
+                padding: "8px 12px",
+                background: "var(--black, #333)",
+                color: "var(--bg, #fff)",
+                fontSize: "0.75rem",
+                borderRadius: "var(--radius, 4px)",
+                whiteSpace: "nowrap",
+                zIndex: 100,
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                pointerEvents: "none",
+                fontFamily: "var(--font-ui, sans-serif)",
+                fontWeight: "normal",
+                letterSpacing: "normal",
+                textTransform: "none"
+              }}>
+                Click on search option to search for tags
+                <div style={{
+                  position: "absolute",
+                  bottom: "100%",
+                  left: "15px",
+                  borderWidth: "6px",
+                  borderStyle: "solid",
+                  borderColor: "transparent transparent var(--black, #333) transparent"
+                }} />
+              </div>
+            )}
+          </div>
           <button 
             onClick={() => {
               setIsSearching(!isSearching);
