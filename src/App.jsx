@@ -117,6 +117,9 @@ function App() {
             <Link to="/privacy" style={{ marginRight: "15px", color: "inherit", textDecoration: "none" }}>Privacy Policy</Link>
             <Link to="/terms" style={{ color: "inherit", textDecoration: "none" }}>Terms of Service</Link>
           </p>
+          <p style={{ marginTop: "10px", fontSize: "14px", color: "#666" }}>
+            Developed by <a href="https://github.com/KushagraTiwari0" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none", fontWeight: "bold" }}>Kushagra Tiwari</a>
+          </p>
         </footer>
       </div>
     </Router>
