@@ -6,7 +6,7 @@ import { useArticlesQuery, useAuth } from "../hooks";
 import axios from "axios";
 import { API_BASE_URL } from "../constants";
 
-const initialFilters = { tag: "", offset: 0, limit: 10, feed: false };
+const initialFilters = { tag: "", offset: 0, limit: 10, feed: false, sort: "likes" };
 
 function Home() {
   const { isAuth, authUser } = useAuth();
@@ -88,8 +88,8 @@ function Home() {
       <div className="container page">
         <div className="row">
           <div className="col-md-9">
-            <div className="feed-toggle">
-              <ul className="nav-pills">
+            <div className="feed-toggle" style={{ display: "flex", alignItems: "center" }}>
+              <ul className="nav-pills" style={{ flex: 1, borderBottom: "1px solid var(--rule)" }}>
                 {isAuth && (
                   <li className="nav-item">
                     <button
@@ -128,6 +128,29 @@ function Home() {
                   </li>
                 )}
               </ul>
+              {(!filters.feed || filters.tag) && (
+                <div style={{ paddingBottom: "10px", borderBottom: "1px solid var(--rule)", display: "flex", gap: "8px", alignItems: "center" }}>
+                  <span style={{ fontSize: "0.75rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Sort by:</span>
+                  <select 
+                    value={filters.sort || "likes"} 
+                    onChange={(e) => setFilters({ ...filters, sort: e.target.value, offset: 0 })}
+                    style={{
+                      padding: "4px 8px",
+                      borderRadius: "0",
+                      border: "1px solid var(--rule-dark)",
+                      background: "transparent",
+                      color: "var(--body-text)",
+                      fontSize: "0.75rem",
+                      cursor: "pointer",
+                      outline: "none",
+                      fontFamily: "var(--font-ui)"
+                    }}
+                  >
+                    <option value="likes">Most Liked</option>
+                    <option value="date">Latest</option>
+                  </select>
+                </div>
+              )}
             </div>
 
             {isAuth && isYourFeed && feedChecked && feedEmpty ? (

@@ -4,12 +4,13 @@ import {
   useArticleCommentsQuery,
   useAuth,
 } from "../hooks";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ArticleComment from "./ArticleComment";
 import ArticleCommentForm from "./ArticleCommentForm";
 
 function ArticleComments() {
   const { isAuth } = useAuth();
+  const location = useLocation();
 
   const {
     isArticleCommentsLoading,
@@ -31,9 +32,9 @@ function ArticleComments() {
           You must be logged in to add a comment on this article.
         </p>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          <Link to="/login" className="btn btn-sm btn-outline-primary">Sign in</Link>
+          <Link to="/login" state={{ from: location }} className="btn btn-sm btn-outline-primary">Sign in</Link>
           <span style={{ color: "var(--light-muted)", fontSize: "0.8rem", fontStyle: "italic" }}>or</span>
-          <Link to="/register" className="btn btn-sm btn-primary">Sign up</Link>
+          <Link to="/register" state={{ from: location }} className="btn btn-sm btn-primary">Sign up</Link>
         </div>
       </div>
     );
