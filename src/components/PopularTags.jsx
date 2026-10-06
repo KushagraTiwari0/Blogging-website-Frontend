@@ -104,16 +104,9 @@ function PopularTags({ onTagClick }) {
                 ))}
                 {hasMore && (
                     <span
-                        className="tag-pill tag-default"
+                        className="tag-pill tag-default tag-show-all"
                         onClick={() => setShowAll(!showAll)}
-                        style={{ 
-                            display: "inline-flex", 
-                            alignItems: "center", 
-                            fontStyle: "italic",
-                            borderStyle: "dashed",
-                            background: "transparent",
-                            opacity: 0.8
-                        }}
+                        style={{ display: "inline-flex", alignItems: "center" }}
                     >
                         {showAll ? "Show less" : `Show all (${filteredTags.length})`}
                     </span>

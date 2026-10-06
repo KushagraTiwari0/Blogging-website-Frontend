@@ -607,6 +607,15 @@ fieldset[disabled] { opacity: 0.5; pointer-events: none; }
   box-shadow: none;
 }
 
+.tag-show-all {
+  font-style: italic;
+  border-style: dashed;
+  opacity: 0.8;
+}
+.tag-show-all:hover {
+  opacity: 1;
+}
+
 /* ── Sidebar ──────────────────────────────────────────────── */
 .sidebar {
   background: transparent;
