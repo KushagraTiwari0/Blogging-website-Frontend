@@ -7,6 +7,7 @@ function PopularTags({ onTagClick }) {
     const [inputValue, setInputValue] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [showTooltip, setShowTooltip] = useState(false);
+    const [showAll, setShowAll] = useState(false);
     
     // Store click counts in state
     const [clickCounts, setClickCounts] = useState(() => {
@@ -67,8 +68,8 @@ function PopularTags({ onTagClick }) {
         
         const allTags = tags?.tags ?? [];
 
-        // Sort by click counts descending, then filter by searchQuery, then take at most 5
-        const processedTags = allTags
+        // Sort by click counts descending, then filter by searchQuery
+        const filteredTags = allTags
             .map(tag => ({
                 name: tag,
                 count: clickCounts[tag] || 0
@@ -79,24 +80,46 @@ function PopularTags({ onTagClick }) {
                 }
                 return a.name.localeCompare(b.name);
             })
-            .filter(tag => tag.name.toLowerCase().includes(searchQuery.toLowerCase()))
-            .slice(0, 5);
+            .filter(tag => tag.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
-        if (processedTags.length === 0) {
+        if (filteredTags.length === 0) {
             return <div style={{ fontSize: "0.75rem", color: "var(--muted)", fontStyle: "italic", padding: "4px 0" }}>No tags found</div>;
         }
 
-        return processedTags.map(({ name, count }) => (
-            <span 
-              key={name} 
-              className="tag-pill tag-default"
-              onClick={() => handleTagClickInternal(name)}
-              style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}
-            >
-                {name}
-                {count > 0 && <span style={{ fontSize: "0.55rem", opacity: 0.7, fontWeight: 500 }}>({count})</span>}
-            </span>
-        ));
+        const hasMore = filteredTags.length > 5;
+        const displayedTags = showAll ? filteredTags : filteredTags.slice(0, 5);
+
+        return (
+            <>
+                {displayedTags.map(({ name, count }) => (
+                    <span 
+                      key={name} 
+                      className="tag-pill tag-default"
+                      onClick={() => handleTagClickInternal(name)}
+                      style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}
+                    >
+                        {name}
+                        {count > 0 && <span style={{ fontSize: "0.55rem", opacity: 0.7, fontWeight: 500 }}>({count})</span>}
+                    </span>
+                ))}
+                {hasMore && (
+                    <span
+                        className="tag-pill tag-default"
+                        onClick={() => setShowAll(!showAll)}
+                        style={{ 
+                            display: "inline-flex", 
+                            alignItems: "center", 
+                            fontStyle: "italic",
+                            borderStyle: "dashed",
+                            background: "transparent",
+                            opacity: 0.8
+                        }}
+                    >
+                        {showAll ? "Show less" : `Show all (${filteredTags.length})`}
+                    </span>
+                )}
+            </>
+        );
     }
 
     return (

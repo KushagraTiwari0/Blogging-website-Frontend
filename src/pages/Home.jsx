@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { ArticleList, PopularTags, SEO } from "../components";
 import { useArticlesQuery, useAuth } from "../hooks";
 import axios from "axios";
@@ -9,6 +10,7 @@ const initialFilters = { tag: "", offset: 0, limit: 10, feed: false };
 
 function Home() {
   const { isAuth, authUser } = useAuth();
+  const navigate = useNavigate();
 
   const [filters, setFilters] = React.useState({ ...initialFilters, feed: isAuth });
   const [feedEmpty, setFeedEmpty] = React.useState(false);
@@ -178,6 +180,29 @@ function Home() {
           </div>
         </div>
       </div>
+
+      {/* Floating Write Button */}
+      <button 
+        onClick={() => navigate("/editor")}
+        className="btn btn-lg btn-outline-primary"
+        style={{
+          position: "fixed",
+          bottom: "30px",
+          right: "30px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          zIndex: 1000,
+          display: "flex",
+          alignItems: "center",
+          gap: "8px"
+        }}
+        title="Write an article"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 20h9"></path>
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+        </svg>
+        Write
+      </button>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
-import { Link, useMatch, useNavigate } from "react-router-dom";
+import { Link, useMatch, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../hooks";
 import { API_BASE_URL } from "../constants";
@@ -241,6 +241,8 @@ function OTPStep({ email, isRegister, onSuccess, onBack, generatedOtp, setGenera
 function Auth() {
   const isRegister = useMatch("/register");
   const navigate   = useNavigate();
+  const location   = useLocation();
+  const from       = location.state?.from?.pathname || "/";
   const { login }  = useAuth();
 
   const [authErrors, setAuthErrors]     = useState([]);
@@ -264,7 +266,7 @@ function Auth() {
 
       console.log("[GOOGLE] Backend response:", data);
       login(data.user);
-      navigate("/");
+      navigate(from);
     } catch (err) {
       console.error("[GOOGLE] Error:", err.response?.data);
       setAuthErrors([err.response?.data?.message || "Google sign-in failed. Please try again."]);
@@ -306,7 +308,7 @@ function Auth() {
 
       // Fallback — if backend returns user directly
       login(data.user);
-      navigate("/");
+      navigate(from);
 
     } catch (error) {
       const res    = error.response;
@@ -348,7 +350,7 @@ function Auth() {
 
   function handleOTPSuccess(user) {
     login(user);
-    navigate("/");
+    navigate(from);
   }
 
   function handleOTPBack() {

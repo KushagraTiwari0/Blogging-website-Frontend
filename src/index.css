@@ -520,6 +520,7 @@ img { max-width: 100%; display: block; }
 .btn-outline-primary {
   color: var(--black);
   border-color: var(--black);
+  background: var(--bg);
 }
 .btn-outline-primary:hover {
   background: var(--black);
