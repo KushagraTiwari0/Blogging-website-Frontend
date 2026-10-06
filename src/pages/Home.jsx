@@ -8,6 +8,56 @@ import { API_BASE_URL } from "../constants";
 
 const initialFilters = { tag: "", offset: 0, limit: 10, feed: false, sort: "likes" };
 
+const BANNER_TEXTS = [
+  "A place to share your knowledge.",
+  "Discover stories, thinking, and expertise.",
+  "Connect with a community of readers and writers.",
+  "Read, write, and deepen your understanding.",
+  "Your ideas, your voice, your platform."
+];
+
+function Typewriter({ texts }) {
+  const [textIndex, setTextIndex] = React.useState(0);
+  const [charIndex, setCharIndex] = React.useState(0);
+  const [isDeleting, setIsDeleting] = React.useState(false);
+  const [blink, setBlink] = React.useState(true);
+
+  React.useEffect(() => {
+    const blinkInterval = setInterval(() => setBlink(b => !b), 500);
+    return () => clearInterval(blinkInterval);
+  }, []);
+
+  React.useEffect(() => {
+    const currentText = texts[textIndex];
+    let speed = isDeleting ? 40 : 80;
+    
+    if (!isDeleting && charIndex === currentText.length) {
+      speed = 2500; // Pause at the end of typing
+      const timeout = setTimeout(() => setIsDeleting(true), speed);
+      return () => clearTimeout(timeout);
+    }
+    
+    if (isDeleting && charIndex === 0) {
+      setIsDeleting(false);
+      setTextIndex((prev) => (prev + 1) % texts.length);
+      return;
+    }
+    
+    const timeout = setTimeout(() => {
+      setCharIndex((prev) => prev + (isDeleting ? -1 : 1));
+    }, speed);
+    
+    return () => clearTimeout(timeout);
+  }, [charIndex, isDeleting, textIndex, texts]);
+
+  return (
+    <span>
+      {texts[textIndex].substring(0, charIndex)}
+      <span style={{ opacity: blink ? 1 : 0, transition: 'opacity 0.1s' }}>|</span>
+    </span>
+  );
+}
+
 function Home() {
   const { isAuth, authUser } = useAuth();
   const navigate = useNavigate();
@@ -98,7 +148,7 @@ function Home() {
       <div className="banner">
         <div className="container">
           <h1 className="logo-font">Blogging</h1>
-          <p>A place to share your knowledge.</p>
+          <p><Typewriter texts={BANNER_TEXTS} /></p>
         </div>
       </div>
 
