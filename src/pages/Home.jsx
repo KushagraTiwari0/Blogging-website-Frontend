@@ -22,7 +22,7 @@ function Home() {
   const [feedEmpty, setFeedEmpty] = React.useState(false);
   const [feedChecked, setFeedChecked] = React.useState(false);
 
-  const isFirstAuthRender = React.useRef(true);
+  const prevAuth = React.useRef(isAuth);
 
   const { isArticlesLoading, articles, ArticlesError } = useArticlesQuery(filters);
 
@@ -33,13 +33,12 @@ function Home() {
 
   // ── When auth changes reset filters ───────────────────────
   React.useEffect(() => {
-    if (isFirstAuthRender.current) {
-      isFirstAuthRender.current = false;
-      return;
+    if (prevAuth.current !== isAuth) {
+      setFilters({ ...initialFilters, feed: isAuth });
+      setFeedEmpty(false);
+      setFeedChecked(false);
+      prevAuth.current = isAuth;
     }
-    setFilters({ ...initialFilters, feed: isAuth });
-    setFeedEmpty(false);
-    setFeedChecked(false);
   }, [isAuth]);
 
   // ── Check if Your Feed is empty → fall back to global ─────
