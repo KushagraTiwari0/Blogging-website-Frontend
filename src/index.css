@@ -616,6 +616,20 @@ fieldset[disabled] { opacity: 0.5; pointer-events: none; }
   opacity: 1;
 }
 
+.custom-dropdown-item {
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  font-family: var(--font-ui, sans-serif);
+  cursor: pointer;
+  color: var(--black);
+  background: var(--bg);
+  transition: all 0.2s ease;
+}
+.custom-dropdown-item:hover {
+  background: var(--black);
+  color: var(--bg);
+}
+
 /* ── Sidebar ──────────────────────────────────────────────── */
 .sidebar {
   background: transparent;

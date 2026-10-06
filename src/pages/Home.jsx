@@ -21,6 +21,7 @@ function Home() {
   });
   const [feedEmpty, setFeedEmpty] = React.useState(false);
   const [feedChecked, setFeedChecked] = React.useState(false);
+  const [isSortOpen, setIsSortOpen] = React.useState(false);
 
   const prevAuth = React.useRef(isAuth);
 
@@ -145,26 +146,55 @@ function Home() {
                 )}
               </ul>
               {(!filters.feed || filters.tag) && (
-                <div style={{ display: "flex", gap: "8px", alignItems: "center", paddingBottom: "2px" }}>
+                <div style={{ display: "flex", gap: "8px", alignItems: "center", paddingBottom: "2px", position: "relative" }}>
                   <span style={{ fontSize: "0.75rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Sort by:</span>
-                  <select 
-                    value={filters.sort || "likes"} 
-                    onChange={(e) => setFilters({ ...filters, sort: e.target.value, offset: 0 })}
-                    style={{
-                      padding: "4px 8px",
-                      borderRadius: "0",
-                      border: "1px solid var(--rule-dark)",
-                      background: "transparent",
-                      color: "var(--body-text)",
-                      fontSize: "0.75rem",
-                      cursor: "pointer",
-                      outline: "none",
-                      fontFamily: "var(--font-ui)"
-                    }}
-                  >
-                    <option value="likes">Most Liked</option>
-                    <option value="date">Latest</option>
-                  </select>
+                  <div style={{ position: "relative" }}>
+                    <button 
+                      type="button"
+                      className="btn btn-sm btn-outline-primary"
+                      onClick={() => setIsSortOpen(!isSortOpen)}
+                      onBlur={() => setTimeout(() => setIsSortOpen(false), 150)}
+                      style={{
+                        cursor: "pointer",
+                        fontFamily: "var(--font-ui)",
+                        padding: "4px 8px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px"
+                      }}
+                    >
+                      {filters.sort === 'date' ? "Latest" : "Most Liked"}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    {isSortOpen && (
+                      <div style={{
+                        position: "absolute",
+                        top: "100%",
+                        right: 0,
+                        marginTop: "4px",
+                        background: "var(--bg)",
+                        border: "1px solid var(--black)",
+                        zIndex: 1000,
+                        minWidth: "120px",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                        display: "flex",
+                        flexDirection: "column"
+                      }}>
+                        <div 
+                           className="custom-dropdown-item"
+                           onClick={() => { setFilters({ ...filters, sort: "likes", offset: 0 }); setIsSortOpen(false); }}
+                        >
+                          Most Liked
+                        </div>
+                        <div 
+                           className="custom-dropdown-item"
+                           onClick={() => { setFilters({ ...filters, sort: "date", offset: 0 }); setIsSortOpen(false); }}
+                        >
+                          Latest
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
