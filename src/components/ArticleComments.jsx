@@ -26,11 +26,16 @@ function ArticleComments() {
 
   if (!isAuth) {
     return (
-      <p>
-        <Link to="/login">Sign in</Link>{" or "}
-        <Link to="/register">Sign up</Link> to add
-        comment on this article
-      </p>
+      <div style={{ textAlign: "center", padding: "24px 0", background: "var(--surface)", border: "1px solid var(--rule)", display: "flex", flexDirection: "column", gap: "12px", alignItems: "center" }}>
+        <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.9rem" }}>
+          You must be logged in to add a comment on this article.
+        </p>
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <Link to="/login" className="btn btn-sm btn-outline-primary">Sign in</Link>
+          <span style={{ color: "var(--light-muted)", fontSize: "0.8rem", fontStyle: "italic" }}>or</span>
+          <Link to="/register" className="btn btn-sm btn-primary">Sign up</Link>
+        </div>
+      </div>
     );
   }
 
