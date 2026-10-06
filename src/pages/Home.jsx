@@ -12,14 +12,31 @@ function Home() {
   const { isAuth, authUser } = useAuth();
   const navigate = useNavigate();
 
-  const [filters, setFilters] = React.useState({ ...initialFilters, feed: isAuth });
+  const [filters, setFilters] = React.useState(() => {
+    try {
+      const saved = sessionStorage.getItem("blogging_home_filters");
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return { ...initialFilters, feed: isAuth };
+  });
   const [feedEmpty, setFeedEmpty] = React.useState(false);
   const [feedChecked, setFeedChecked] = React.useState(false);
 
+  const isFirstAuthRender = React.useRef(true);
+
   const { isArticlesLoading, articles, ArticlesError } = useArticlesQuery(filters);
+
+  // ── Save filters to sessionStorage ─────────────────────────
+  React.useEffect(() => {
+    sessionStorage.setItem("blogging_home_filters", JSON.stringify(filters));
+  }, [filters]);
 
   // ── When auth changes reset filters ───────────────────────
   React.useEffect(() => {
+    if (isFirstAuthRender.current) {
+      isFirstAuthRender.current = false;
+      return;
+    }
     setFilters({ ...initialFilters, feed: isAuth });
     setFeedEmpty(false);
     setFeedChecked(false);
